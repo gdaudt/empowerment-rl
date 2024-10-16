@@ -271,7 +271,7 @@ def deterministic_weighted_empowerment(state, grid, n, gamma=0.6, expo=3):
     return empowerment
 
 #rewrite the deterministic_weighted_empowerment function removing the prints 
-def deterministic_weighted_empowerment_clean(state, grid, n, gamma=0.6, expo=2):
+def deterministic_weighted_empowerment_clean(state, grid, n, gamma=1, expo=3):
     reachable, terminal = reachable_states_terminal_verbose(state, grid, n)
     reachable_steps, terminal_steps = {}, {}
     total_decrease = 0    
@@ -310,7 +310,7 @@ for i in range(1, grid.shape[0]-1):
     for j in range(1, grid.shape[1]-1):
         state = (i, j)
         if(grid[i, j] != WALL):
-            empowerment_grid[i, j] = deterministic_weighted_empowerment_clean(state, grid, 5)
+            empowerment_grid[i, j] = deterministic_weighted_empowerment_clean(state, grid, step_size)
         else:
             empowerment_grid[i, j] = 0  # Set to 0 for walls
 end = time.time()
