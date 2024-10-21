@@ -25,13 +25,13 @@ EMPTY = 0           # Empty cells are where the agent can move
 
 # Example grid (0: empty, 1: wall)
 # 3x3 in the middle and walls around the edges
-# grid = np.array([
-#     [1, 1, 1, 1, 1],
-#     [1, 0, 0, 0, 1],
-#     [1, 0, 0, 0, 1],
-#     [1, 0, 0, 0, 1],
-#     [1, 1, 1, 1, 1]
-# ])
+grid = np.array([
+    [1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1]
+])
 # 4 x 4 in the middle and walls around the edges
 # grid = np.array([
 #     [1, 1, 1, 1, 1, 1],
@@ -57,18 +57,18 @@ EMPTY = 0           # Empty cells are where the agent can move
 # ])
 
 # grid with some walls added
-grid = np.array([
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1],
-    [1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-])
+# grid = np.array([
+#     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+#     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+#     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+#     [1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
+#     [1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
+#     [1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
+#     [1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1],
+#     [1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+#     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+#     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+# ])
 
 gridsize = 10
 
@@ -194,12 +194,6 @@ def reachable_states_terminal_verbose(state, grid, n):
     
     return reachable, terminal
 
-def deterministic_empowerment_full(state, grid, n):
-    reachable, terminal = reachable_states_terminal_verbose(state, grid, n)
-    total_reach = len(reachable) + len(terminal)
-    empowerment = np.log2(total_reach)  # log of the number of unique reachable states
-    return empowerment
-    
 # Function to compute deterministic empowerment for n steps
 def deterministic_empowerment(state, grid, n):
     #print("Reachable states from {}: {}, reachable size is {}.".format(state, reachable, len(reachable)))
@@ -276,27 +270,6 @@ def deterministic_weighted_empowerment(state, grid, n, gamma=0.6, expo=3):
     print("Total decrease in empowerment: {}".format(total_decrease))
     return empowerment
 
-def deterministic_positive_empowerment_clean(state, grid, n, gamma=1, expo=3):
-    reachable, terminal = reachable_states_terminal_verbose(state, grid, n)
-    reachable_steps, terminal_steps = {}, {}
-    total_decrease = 0    
-    for key, value in reachable.items():
-        # group the amount of reachable states by the step they were reached
-        if value not in reachable_steps:
-            reachable_steps[value] = 1
-        else:
-            reachable_steps[value] += 1
-    #print the reachable steps   
-    #do the same for the terminal states
-    for key, value in terminal.items():        
-        if value not in terminal_steps:
-            terminal_steps[value] = 1
-        else:
-            terminal_steps[value] += 1   
-    #calculate the new empowerment that discounts the terminal empowerment by gamma, and weights the terminal state reachability by a factor of 1/step
-    empowerment = np.log2(len(reachable)-1)   
-    return empowerment
-
 #rewrite the deterministic_weighted_empowerment function removing the prints 
 def deterministic_weighted_empowerment_clean(state, grid, n, gamma=1, expo=3):
     reachable, terminal = reachable_states_terminal_verbose(state, grid, n)
@@ -319,9 +292,11 @@ def deterministic_weighted_empowerment_clean(state, grid, n, gamma=1, expo=3):
     empowerment = np.log2(len(reachable)-1)
     for key, value in terminal_steps.items():
         empowerment -= np.log2(value) * gamma / key**expo
+        total_decrease += np.log2(value) * gamma / key**expo
     return empowerment
 
 
+# Function to normalize the grid values between 0 and 1
 def normalize_grid(grid):
     grid = (grid - np.min(grid)) / (np.max(grid) - np.min(grid))
     return grid
@@ -329,14 +304,14 @@ def normalize_grid(grid):
 # compute the empowerment for each non-obstacle cell of the grid
 # while calculating the time it takes to compute the empowerment for all cells
 empowerment_grid = np.zeros(grid.shape)
-step_size = 1
+step_size = 5
 
 start = time.time()
 for i in range(1, grid.shape[0]-1):
     for j in range(1, grid.shape[1]-1):
         state = (i, j)
         if(grid[i, j] != WALL):
-            empowerment_grid[i, j] = deterministic_empowerment_full(state, grid, step_size)
+            empowerment_grid[i, j] = deterministic_weighted_empowerment_clean(state, grid, step_size)
         else:
             empowerment_grid[i, j] = 0  # Set to 0 for walls
 end = time.time()
