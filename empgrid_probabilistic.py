@@ -74,9 +74,9 @@ gridsize = 10
 
 
 # Define the 8 diagonal directions and stay-in-place action
-actions = [(-1, -1), (-1, 0), (-1, 1),  # Up-left, Up, Up-right
+actions = [(1, -1), (-1, 0), (1, 1),  # Up-left, Up, Up-right
            (0, -1),  (0, 0),  (0, 1),   # Left, Stay, Right
-           (1, -1),  (1, 0),  (1, 1)]   # Down-left, Down, Down-right
+           (-1, -1),  (1, 0),  (-1, 1)]   # Down-left, Down, Down-right
 len_actions = len(actions) - 1
 print(len_actions)
 #define the 4 cardinal actions as an alternative

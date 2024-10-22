@@ -1,4 +1,5 @@
 #print a 3x3 grid with white background and black lines using pygame
+import math
 import pygame
 import sys
 from pygame.locals import *
@@ -74,9 +75,9 @@ gridsize = 10
 
 
 # Define the 8 diagonal directions and stay-in-place action
-actions = [(-1, -1), (-1, 0), (-1, 1),  # Up-left, Up, Up-right
+actions = [(1, -1), (-1, 0), (1, 1),  # Up-left, Up, Up-right
            (0, -1),  (0, 0),  (0, 1),   # Left, Stay, Right
-           (1, -1),  (1, 0),  (1, 1)]   # Down-left, Down, Down-right
+           (-1, -1),  (1, 0),  (-1, 1)]   # Down-left, Down, Down-right
 len_actions = len(actions) - 1
 print(len_actions)
 #define the 4 cardinal actions as an alternative
@@ -298,7 +299,7 @@ def deterministic_positive_empowerment_clean(state, grid, n, gamma=1, expo=3):
     return empowerment
 
 #rewrite the deterministic_weighted_empowerment function removing the prints 
-def deterministic_weighted_empowerment_clean(state, grid, n, gamma=1, expo=3):
+def deterministic_weighted_empowerment_clean(state, grid, n, gamma=1, expo=2):
     reachable, terminal = reachable_states_terminal_verbose(state, grid, n)
     reachable_steps, terminal_steps = {}, {}
     total_decrease = 0    
@@ -336,9 +337,9 @@ for i in range(1, grid.shape[0]-1):
     for j in range(1, grid.shape[1]-1):
         state = (i, j)
         if(grid[i, j] != WALL):
-            empowerment_grid[i, j] = deterministic_empowerment_full(state, grid, step_size)
+            empowerment_grid[i, j] = deterministic_weighted_empowerment_clean(state, grid, step_size)
         else:
-            empowerment_grid[i, j] = 0  # Set to 0 for walls
+            empowerment_grid[i, j] = -3  # Set to negative for walls
 end = time.time()
 print(np.round(empowerment_grid, 4))
 print("Time to compute empowerment for all cells: {}".format(end - start))
@@ -358,7 +359,7 @@ windowSurface.fill(WHITE)
 #fill the rectangles with white to black gradient according to the empowerment values
 #normalize the empowerment values between 0 and 1
 empowerment_grid = normalize_grid(empowerment_grid)
-
+print(np.round(empowerment_grid, 4))
 #draw all rectangles with the empowerment values
 #draw the size proportional to the grid size to make it fit the window according to WINDOWWIDTH and WINDOWHEIGHT values
 
