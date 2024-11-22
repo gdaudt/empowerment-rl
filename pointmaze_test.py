@@ -7,10 +7,26 @@ from stable_baselines3.common.env_util import make_vec_env
 
 gym.register_envs(gymnasium_robotics)
 
+G = "g"
+R = "r"
+
+emp_test_maze = [ 
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, G, G, 0, 0, 0, 0, 1],
+    [1, G, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 0, 1, 0, 0, 0, 1],
+    [1, 1, 0, 1, 0, 0, 0, 1],
+    [1, 1, 0, 1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, R, R, R, R, R, R, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1]
+]
+
 def setup_and_test_env():
     # Initialize the PointMaze environment with U_MAZE configuration
-    env = gym.make('PointMaze_UMazeDense-v3', render_mode='human')
-    
+    env = gym.make('PointMaze_UMazeDense-v3', maze_map=emp_test_maze, render_mode='human')
     # Reset the environment to get the initial observation
     observation, info = env.reset(seed=42)  # Seed ensures reproducibility
 

@@ -399,7 +399,7 @@ class PointMazeEnv(MazeEnv, EzPickle):
         info["success"] = bool(
             np.linalg.norm(obs_dict["achieved_goal"] - self.goal) <= 0.45
         )
-        #info["collision"] = self.compute_collision(obs_dict["achieved_goal"], info)
+        info["collision"] = self.compute_collision(obs_dict["achieved_goal"], info)
 
         # Update the goal position if necessary
         self.update_goal(obs_dict["achieved_goal"])
