@@ -65,7 +65,7 @@ def train_and_test_agent():
     eval_env.close()
 
 if __name__ == "__main__":
-    # print("Testing the environment...")
-    # setup_and_test_env()
-    print("Training and testing the RL agent...")
-    train_and_test_agent()
+    print("Testing the environment...")
+    setup_and_test_env()
+    # print("Training and testing the RL agent...")
+    # train_and_test_agent()

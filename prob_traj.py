@@ -38,7 +38,7 @@ N = 10
 
 # Initial conditions
 x0, y0, z0 = 0.0, 0.0, 0.0  # Initial position
-v0x, v0y, v0z = 4, 4, 0  # Initial velocity
+v0x, v0y, v0z = 3, 3, 0  # Initial velocity
 
 # Define force functions as functions of time
 def rnd_simplex():
@@ -60,7 +60,7 @@ final_y_out = []
 final_z_out = []
 no_collision = 0
 
-fig = plt.figure(figsize=(10, 7))
+fig = plt.figure(figsize=(30, 25))
 ax = fig.add_subplot(111, projection='3d')
 
 final_points = None

@@ -37,8 +37,8 @@ F_max = 0.06*9.81*2
 N = 10
 
 # Initial conditions
-x0, y0, z0 = 0.0, 0.0, 0.0  # Initial position
-v0x, v0y, v0z = 0.4, 0.6, 0  # Initial velocity
+x0, y0, z0 = 0.0, 1.8, 0.0  # Initial position
+v0x, v0y, v0z = 0.0, 0.0, 0  # Initial velocity
 
 # Define force functions as functions of time
 def rnd_simplex():
