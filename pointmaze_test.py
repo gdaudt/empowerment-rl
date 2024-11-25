@@ -67,6 +67,9 @@ def train_and_test_agent():
     print("Starting training...")
     model = PPO("MultiInputPolicy", env, verbose=1)
     model.learn(total_timesteps=10000)
+    #save the model for evaluation later
+    model.save("ppo_pointmaze-emp")
+    print("Model saved as ppo_pointmaze-emp.zip.")
 
     # Test the trained agent
     print("Starting evaluation...")
@@ -79,9 +82,43 @@ def train_and_test_agent():
         if done or truncated:
             obs, info = eval_env.reset()
     eval_env.close()
+    
+def train_agent_save(filename):
+    # Wrap the environment for vectorized training
+    env = make_vec_env(
+        lambda: gym.make(
+            'PointMaze_UMazeDense-v3', maze_map=emp_test_maze, render_mode='rgb_array'
+        ), 
+        n_envs=1
+    )
+
+    # Train a PPO agent
+    print("Starting training...")
+    model = PPO("MultiInputPolicy", env, verbose=1)
+    model.learn(total_timesteps=100000)
+    #save the model for evaluation later
+    model.save(filename)
+    print("Model saved as ppo_pointmaze-emp.zip.")
+
+def evaluate_saved_model(filename):
+    # Load the saved model
+    model = PPO.load(filename)
+    print(f"Model loaded from {filename}.")
+
+    # Evaluate the model
+    eval_env = gym.make('PointMaze_UMazeDense-v3', maze_map=emp_test_maze, render_mode='human')
+    obs, info = eval_env.reset()
+    for _ in range(10000):  # Fixed number of evaluation steps
+        action, _ = model.predict(obs)
+        obs, reward, done, truncated, info = eval_env.step(action)
+        eval_env.render()
+        if done or truncated:
+            obs, info = eval_env.reset()
+    eval_env.close()
 
 if __name__ == "__main__":
-    print("Testing the environment...")
-    setup_and_test_env()
-    # print("Training and testing the RL agent...")
-    # train_and_test_agent()
+    # print("Testing the environment...")
+    # setup_and_test_env()
+    print("Training the RL agent...")
+    filename = "ppo_pointmaze-emp"
+    train_agent_save(filename)
