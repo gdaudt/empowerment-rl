@@ -404,6 +404,9 @@ class MazeEnv(GoalEnv):
     def compute_terminated(
         self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info
     ) -> bool:
+        # In any case, terminate the episode if the agent collides with the wall
+        if self.compute_collision(achieved_goal, info):
+            return True
         if not self.continuing_task:
             # If task is episodic terminate the episode when the goal is reached
             return bool(np.linalg.norm(achieved_goal - desired_goal) <= 0.45)

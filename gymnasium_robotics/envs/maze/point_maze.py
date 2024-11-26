@@ -24,7 +24,7 @@ from gymnasium_robotics.envs.maze.maze_v4 import MazeEnv
 from gymnasium_robotics.envs.maze.point import PointEnv
 from gymnasium_robotics.utils.mujoco_utils import MujocoModelNames
 
-BETA = 0.5
+BETA = 000.5
 
 class PointMazeEnv(MazeEnv, EzPickle):
     """
@@ -394,7 +394,8 @@ class PointMazeEnv(MazeEnv, EzPickle):
         obs, _, _, _, info = self.point_env.step(action)
         obs_dict = self._get_obs(obs)
         empowerment = self.compute_empowerment(obs_dict["observation"], info)
-        reward = self.compute_reward(obs_dict["achieved_goal"], self.goal, info) + BETA * empowerment
+        reward = self.compute_reward(obs_dict["achieved_goal"], self.goal, info)
+        reward = reward * empowerment
         terminated = self.compute_terminated(obs_dict["achieved_goal"], self.goal, info)
         truncated = self.compute_truncated(obs_dict["achieved_goal"], self.goal, info)
         info["success"] = bool(

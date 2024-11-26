@@ -2,3 +2,6 @@
 minigrid_test.py
 cartpole_pytorch.py
 ppo_pytorch.py
+ppo_pointmaze-emp.zip
+ppo_pointmaze-emp*reward.zip
+ppo_pointmaze-reward.zip
