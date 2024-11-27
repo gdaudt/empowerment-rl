@@ -17,7 +17,7 @@ import time
 import xml.etree.ElementTree as ET
 from os import path
 from typing import Dict, List, Optional, Union
-from scipy.integrate import cumtrapz
+from scipy.integrate import cumulative_trapezoid
 from scipy.spatial import ConvexHull
 
 import numpy as np
@@ -502,11 +502,11 @@ class MazeEnv(GoalEnv):
         a_x = F_x(T_SPACED) / MASS
         a_y = F_y(T_SPACED) / MASS
         # Numerically integrate acceleration to get velocity
-        v_x = observation[2] + cumtrapz(a_x, T_SPACED, initial=0)
-        v_y = observation[3] + cumtrapz(a_y, T_SPACED, initial=0)
+        v_x = observation[2] + cumulative_trapezoid(a_x, T_SPACED, initial=0)
+        v_y = observation[3] + cumulative_trapezoid(a_y, T_SPACED, initial=0)
         # Numerically integrate velocity to get position
-        x = observation[0] + cumtrapz(v_x, T_SPACED, initial=0)
-        y = observation[1] + cumtrapz(v_y, T_SPACED, initial=0)
+        x = observation[0] + cumulative_trapezoid(v_x, T_SPACED, initial=0)
+        y = observation[1] + cumulative_trapezoid(v_y, T_SPACED, initial=0)
         #concatenate x and y ndarrays into one
         
         return np.array([x[-1], y[-1]])

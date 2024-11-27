@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.integrate import cumtrapz
+from scipy.integrate import cumulative_trapezoid
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from scipy.spatial import ConvexHull
@@ -79,14 +79,14 @@ for _ in range(trajs):
   #a_z = F_z(t) / m
 
   # Numerically integrate acceleration to get velocity
-  v_x = v0x + cumtrapz(a_x, t, initial=0)
-  v_y = v0y + cumtrapz(a_y, t, initial=0)
-  #v_z = v0z + cumtrapz(a_z, t, initial=0)
+  v_x = v0x + cumulative_trapezoid(a_x, t, initial=0)
+  v_y = v0y + cumulative_trapezoid(a_y, t, initial=0)
+  #v_z = v0z + cumulative_trapezoid(a_z, t, initial=0)
 
   # Numerically integrate velocity to get position
-  x = x0 + cumtrapz(v_x, t, initial=0)
-  y = y0 + cumtrapz(v_y, t, initial=0)
-  #z = z0 + cumtrapz(v_z, t, initial=0)
+  x = x0 + cumulative_trapezoid(v_x, t, initial=0)
+  y = y0 + cumulative_trapezoid(v_y, t, initial=0)
+  #z = z0 + cumulative_trapezoid(v_z, t, initial=0)
 
   x_traj.append(x)
   y_traj.append(y)
