@@ -9,6 +9,9 @@ gym.register_envs(gymnasium_robotics)
 
 policy_save_path = "/Trained policies/"
 
+TEST = "test"
+TRAIN = "train"
+EVAL = "eval"
 G = "g"
 R = "r"
 
@@ -99,11 +102,11 @@ def train_agent_save(filename):
     model = PPO("MultiInputPolicy", env, verbose=1)
     model.learn(total_timesteps=100000)
     #save the model for evaluation later
-    model.save(policy_save_path + filename)
+    model.save(filename)
 
 def evaluate_saved_model(filename):
     # Load the saved model
-    model = PPO.load(policy_save_path + filename)
+    model = PPO.load(filename)
     print(f"Model loaded from {filename}.")
 
     # Evaluate the model
@@ -118,12 +121,18 @@ def evaluate_saved_model(filename):
     eval_env.close()
 
 if __name__ == "__main__":
-    # print("Testing the environment...")
-    # setup_and_test_env()
-    print("Training the RL agent...")
-    filename = "ppo_pointmaze-emp*reward-termination"
-    train_agent_save(filename)
-    # print("Evaluating the trained agent...")
-    # filename = "ppo_pointmaze-reward"
-    # print("Evaluating model saved as ", filename)
-    # evaluate_saved_model(filename)
+    
+    mode = EVAL
+    
+    if(mode == TEST):
+        print("Testing the environment...")
+        setup_and_test_env()
+    if(mode == TRAIN):       
+        print("Training the RL agent...")
+        filename = "ppo_pointmaze-emp*reward-termination"
+        train_agent_save(filename)
+    if(mode == EVAL):
+        print("Evaluating the trained agent...")
+        filename = "ppo_pointmaze-emp*reward-termination"
+        print("Evaluating model saved as ", filename)
+        evaluate_saved_model(filename)

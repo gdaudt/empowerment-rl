@@ -46,3 +46,4 @@ gymnasium_robotics/utils/__pycache__/mujoco_utils.cpython-312.pyc
 gymnasium_robotics/utils/__pycache__/mujoco_utils.cpython-313.pyc
 gymnasium_robotics/envs/maze/__pycache__/maze_v4.cpython-311.pyc
 ppo_pointmaze-emp*reward-termination.zip
+gymnasium_robotics/envs/maze/__pycache__/maze_v4.cpython-311.pyc
