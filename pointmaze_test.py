@@ -88,11 +88,11 @@ def train_and_test_agent():
             obs, info = eval_env.reset()
     eval_env.close()
     
-def train_agent_save(filename):
+def train_agent_save(filename, render):
     # Wrap the environment for vectorized training
     env = make_vec_env(
         lambda: gym.make(
-            'PointMaze_UMazeDense-v3', maze_map=emp_test_maze, render_mode='rgb_array'
+            'PointMaze_UMazeDense-v3', maze_map=emp_test_maze, render_mode=render, width=1200, height=1200
         ), 
         n_envs=1
     )
@@ -104,13 +104,13 @@ def train_agent_save(filename):
     #save the model for evaluation later
     model.save(filename)
 
-def evaluate_saved_model(filename):
+def evaluate_saved_model(filename, render):
     # Load the saved model
     model = PPO.load(filename)
     print(f"Model loaded from {filename}.")
 
     # Evaluate the model
-    eval_env = gym.make('PointMaze_UMazeDense-v3', maze_map=emp_test_maze, render_mode='human', width=1200, height=1200)
+    eval_env = gym.make('PointMaze_UMazeDense-v3', maze_map=emp_test_maze, render_mode=render, width=1200, height=1200)
     obs, info = eval_env.reset()
     for _ in range(10000):  # Fixed number of evaluation steps
         action, _ = model.predict(obs)
@@ -122,17 +122,18 @@ def evaluate_saved_model(filename):
 
 if __name__ == "__main__":
     
-    mode = EVAL
+    mode = TRAIN
+    filename = "ppo_pointmaze-emp*reward-termination-5col"
+    render = 'human'
     
     if(mode == TEST):
         print("Testing the environment...")
         setup_and_test_env()
     if(mode == TRAIN):       
         print("Training the RL agent...")
-        filename = "ppo_pointmaze-emp*reward-termination"
-        train_agent_save(filename)
+        
+        train_agent_save(filename, render)
     if(mode == EVAL):
-        print("Evaluating the trained agent...")
-        filename = "ppo_pointmaze-emp*reward-termination"
+        print("Evaluating the trained agent...")        
         print("Evaluating model saved as ", filename)
-        evaluate_saved_model(filename)
+        evaluate_saved_model(filename, render)
