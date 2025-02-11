@@ -405,20 +405,22 @@ class MazeEnv(GoalEnv):
         self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info
     ) -> bool:
         # In any case, terminate the episode if the agent collides with the wall
-        global COLLISION_COUNT
+        # global COLLISION_COUNT
+        # if self.compute_collision(achieved_goal, info):
+        #     COLLISION_COUNT += 1
+        #     if(COLLISION_COUNT >= 15):
+        #         COLLISION_COUNT = 0
+        #         return True
+        #     else:
+        #         return False
         if self.compute_collision(achieved_goal, info):
-            COLLISION_COUNT += 1
-            if(COLLISION_COUNT >= 15):
-                COLLISION_COUNT = 0
-                return True
-            else:
-                return False
+            return True
         if not self.continuing_task:
             # If task is episodic terminate the episode when the goal is reached
             return bool(np.linalg.norm(achieved_goal - desired_goal) <= 0.45)
         else:
             # Continuing tasks don't terminate, episode will be truncated when time limit is reached (`max_episode_steps`)
-            COLLISION_COUNT = 0
+            # COLLISION_COUNT = 0
             return False
 
     def update_goal(self, achieved_goal: np.ndarray) -> None:

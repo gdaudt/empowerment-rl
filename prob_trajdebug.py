@@ -24,22 +24,21 @@ collection = Poly3DCollection(verts, facecolors='cyan', edgecolors='r', linewidt
 
 # Define the time array
 t_start = 0
-t_end = 1
-num_points = 100
+t_end = 2
+num_points = 1000
 t = np.linspace(t_start, t_end, num_points)
 
 # Mass of the point particle
-m = 0.027  # kg
-g = 9.81  # m/s² (gravity)
-max_thrust = 8.33  # m/s² (max additional thrust)
-F_max = m * (g + max_thrust)  # Maximum force
+m = 15.0  # kg
+
+F_max = 20*9.81*2
 
 # Numer of chebychev basisfunctions
 N = 10
 
 # Initial conditions
 x0, y0, z0 = 0.0, 0.0, 0.0  # Initial position
-v0x, v0y, v0z = 10, 0, 0  # Initial velocity
+v0x, v0y, v0z = 3, 3, 0  # Initial velocity
 
 # Define force functions as functions of time
 def rnd_simplex():
@@ -49,7 +48,7 @@ def rnd_simplex():
 
 #np.insert(rnd_simplex(),0,0)
 
-trajs = 50
+trajs = 200
 x_traj = []
 y_traj = []
 z_traj = []

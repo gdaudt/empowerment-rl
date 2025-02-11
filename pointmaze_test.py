@@ -12,6 +12,8 @@ policy_save_path = "/Trained policies/"
 TEST = "test"
 TRAIN = "train"
 EVAL = "eval"
+HUMAN = "human"
+RGB = "rgb_array"
 G = "g"
 R = "r"
 
@@ -100,7 +102,7 @@ def train_agent_save(filename, render):
     # Train a PPO agent
     print("Starting training...")
     model = PPO("MultiInputPolicy", env, verbose=1)
-    model.learn(total_timesteps=100000)
+    model.learn(total_timesteps=400000)
     #save the model for evaluation later
     model.save(filename)
 
@@ -122,16 +124,15 @@ def evaluate_saved_model(filename, render):
 
 if __name__ == "__main__":
     
-    mode = TRAIN
-    filename = "ppo_pointmaze-emp*reward-termination-5col"
-    render = 'human'
+    mode = EVAL
+    filename = "ppo_pointmaze-reward"
+    render = HUMAN
     
     if(mode == TEST):
         print("Testing the environment...")
         setup_and_test_env()
     if(mode == TRAIN):       
-        print("Training the RL agent...")
-        
+        print("Training the RL agent...")        
         train_agent_save(filename, render)
     if(mode == EVAL):
         print("Evaluating the trained agent...")        

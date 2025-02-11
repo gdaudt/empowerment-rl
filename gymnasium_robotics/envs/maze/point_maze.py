@@ -393,7 +393,7 @@ class PointMazeEnv(MazeEnv, EzPickle):
     def step(self, action):
         obs, _, _, _, info = self.point_env.step(action)
         obs_dict = self._get_obs(obs)
-        empowerment = self.compute_empowerment(obs_dict["observation"], info)
+        empowerment = self.compute_empowerment(obs_dict["observation"], info) / 2
         reward = self.compute_reward(obs_dict["achieved_goal"], self.goal, info)
         reward = reward * empowerment
         terminated = self.compute_terminated(obs_dict["achieved_goal"], self.goal, info)

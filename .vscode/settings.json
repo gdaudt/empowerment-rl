@@ -1,5 +1,10 @@
 {
     "ros.distro": "jazzy",
-    "python.analysis.extraPaths": ["/home/gd_admin/dev/Minigrid"]
+    "python.analysis.extraPaths": [
+        "/home/gd_admin/dev/Minigrid"
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda",
+    "python-envs.pythonProjects": []
 }
 
